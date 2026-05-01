@@ -296,14 +296,30 @@ export const router = createBrowserRouter([
       // Transaction Routes
       {
         path: ROUTE_PATHS.TRANSACTIONS.BASE,
-        element: (
-          <RouteWrapper
-            loadingMessage="Loading transactions..."
-            requirePermission="financial:create_transactions"
-          >
-            <TransactionsPage />
-          </RouteWrapper>
-        ),
+        children: [
+          {
+            index: true,
+            element: (
+              <RouteWrapper
+                loadingMessage="Loading transactions..."
+                requirePermission="financial:create_transactions"
+              >
+                <TransactionsPage />
+              </RouteWrapper>
+            ),
+          },
+          {
+            path: 'new',
+            element: (
+              <RouteWrapper
+                loadingMessage="Loading record payment page..."
+                requirePermission="financial:create_transactions"
+              >
+                <TransactionsPage />
+              </RouteWrapper>
+            ),
+          },
+        ],
       },
 
       // Report Routes

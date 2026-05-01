@@ -5,6 +5,7 @@
  */
 
 import { useState, useMemo, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Plus, Download, Calculator, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -37,8 +38,17 @@ export default function TransactionsPage() {
   const [filters, setFilters] = useState<TransactionFilters>({});
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [showCreateDialog, setShowCreateDialog] = useState(location.pathname.endsWith('/new'));
   const [showReconcileDialog, setShowReconcileDialog] = useState(false);
+
+  // Sync dialog with URL for quick actions
+  useEffect(() => {
+    if (location.pathname.endsWith('/new')) {
+      setShowCreateDialog(true);
+    }
+  }, [location.pathname]);
   const [viewingTransactionId, setViewingTransactionId] = useState<string | null>(null);
   const [editingTransactionId, setEditingTransactionId] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -370,7 +380,15 @@ export default function TransactionsPage() {
         </Card>
 
         {/* Create Transaction Dialog */}
-        <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+        <Dialog 
+          open={showCreateDialog} 
+          onOpenChange={(open) => {
+            setShowCreateDialog(open);
+            if (!open && location.pathname.endsWith('/new')) {
+              navigate('/transactions', { replace: true });
+            }
+          }}
+        >
           <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[700px]">
             <DialogHeader>
               <DialogTitle>Record New Transaction</DialogTitle>
