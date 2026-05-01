@@ -26,6 +26,7 @@ export function APISettings() {
   const [newKeyPermissions, setNewKeyPermissions] = useState<string[]>([]);
   const [generatedKey, setGeneratedKey] = useState<string | null>(null);
   const [showNewWebhookDialog, setShowNewWebhookDialog] = useState(false);
+  const [newWebhookName, setNewWebhookName] = useState('');
   const [newWebhookUrl, setNewWebhookUrl] = useState('');
   const [newWebhookEvents, setNewWebhookEvents] = useState<string[]>([]);
   const { copyToClipboard, isCopied } = useCopyToClipboard();
@@ -74,19 +75,21 @@ export function APISettings() {
   };
 
   const handleCreateWebhook = async () => {
-    if (!newWebhookUrl.trim() || newWebhookEvents.length === 0) {
-      toast.error('Please provide a URL and select at least one event');
+    if (!newWebhookName.trim() || !newWebhookUrl.trim() || newWebhookEvents.length === 0) {
+      toast.error('Please provide a name, URL and select at least one event');
       return;
     }
 
     try {
       const secret = crypto.randomUUID();
       await createWebhook({
+        name: newWebhookName,
         url: newWebhookUrl,
         events: newWebhookEvents,
         secret,
       });
       setShowNewWebhookDialog(false);
+      setNewWebhookName('');
       setNewWebhookUrl('');
       setNewWebhookEvents([]);
     } catch (error) {
@@ -233,6 +236,7 @@ export function APISettings() {
                     </Button>
                   </div>
                   <div className="text-sm text-muted-foreground">
+                    <p>Name: {webhook.name}</p>
                     <p>Events: {webhook.events.join(', ')}</p>
                     <p>Created: {formatDate(webhook.created_at)}</p>
                   </div>
@@ -347,6 +351,15 @@ export function APISettings() {
             <DialogDescription>Configure a webhook endpoint to receive events</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="webhook-name">Webhook Name</Label>
+              <Input
+                id="webhook-name"
+                value={newWebhookName}
+                onChange={(e) => setNewWebhookName(e.target.value)}
+                placeholder="e.g., Zapier Integration"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="webhook-url">Webhook URL</Label>
               <Input

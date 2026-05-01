@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useAuth } from './useAuth';
+import { useAuthStore } from '@/stores/authStore';
 import * as settingsApi from '@/services/api/settingsApi';
 import { handleError } from '@/lib/errorHandler';
 import type {
@@ -163,7 +164,8 @@ export function useAPIKeys() {
     mutationFn: ({ name, permissions }: { name: string; permissions: string[] }) =>
       {
         if (!organization?.id) throw new Error('Organization ID is required');
-        return settingsApi.generateAPIKey(organization.id, name, permissions);
+        if (!useAuthStore.getState().user?.id) throw new Error('User ID is required');
+        return settingsApi.generateAPIKey(organization.id, useAuthStore.getState().user!.id, name, permissions);
       },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['api-keys'] });
@@ -232,7 +234,7 @@ export function useWebhooks() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (webhook: { url: string; events: string[]; secret: string }) =>
+    mutationFn: (webhook: { name: string; url: string; events: string[]; secret: string }) =>
       {
         if (!organization?.id) throw new Error('Organization ID is required');
         return settingsApi.createWebhook(organization.id, webhook);

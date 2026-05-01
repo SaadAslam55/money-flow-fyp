@@ -447,6 +447,7 @@ export async function getAPIKeys(organizationId: string): Promise<ApiResponse<AP
  */
 export async function generateAPIKey(
   organizationId: string,
+  userId: string,
   name: string,
   permissions: string[]
 ): Promise<ApiResponse<APIKey & { key: string }>> {
@@ -467,9 +468,6 @@ export async function generateAPIKey(
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const keyHash = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 
-    // Get current user for created_by
-    const { data: { user: authUser } } = await supabase.auth.getUser();
-
     const { data: keyData, error } = await supabase
       .from('api_keys')
       .insert({
@@ -479,7 +477,7 @@ export async function generateAPIKey(
         key_hash: keyHash,
         scopes: permissions,
         is_active: true,
-        created_by: authUser?.id || null,
+        created_by: userId,
       })
       .select()
       .single();
@@ -566,6 +564,7 @@ export async function getWebhooks(organizationId: string): Promise<ApiResponse<W
 export async function createWebhook(
   organizationId: string,
   webhook: {
+    name: string;
     url: string;
     events: string[];
     secret: string;
