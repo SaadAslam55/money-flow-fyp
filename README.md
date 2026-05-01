@@ -22,7 +22,7 @@
 - **💳 Expense Tracking** - Record and categorize all business expenses
 - **📈 Financial Reports** - Profit & Loss, Balance Sheet, Cash Flow statements
 - **🔄 Recurring Invoices** - Automated billing for subscriptions
-- **💰 Multi-Payment Methods** - Cash, bank transfer, cards, UPI
+- **💰 Multi-Payment Methods** - Cash, bank transfer, cards, Upaisa
 
 ### Advanced Features (v2.0)
 

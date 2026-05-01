@@ -367,7 +367,7 @@ Written order directing a bank to pay a specific amount.
 **Q: Why are cheques risky?**
 > **A:** They can bounce if the issuer has insufficient funds, and they take time to clear.
 
-#### UPI (Unified Payments Interface)
+#### Upaisa (Unified Payments Interface)
 Digital payment system enabling instant bank transfers via mobile.
 
 ---
@@ -999,7 +999,7 @@ Digital payment system enabling instant bank transfers via mobile.
 ### Payment Questions
 
 **Q: What payment methods does MoneyFlow support?**
-> **A:** Cash, Bank Transfer, Card, Cheque, UPI, JazzCash, Easypaisa, and Raast.
+> **A:** Cash, Bank Transfer, Card, Cheque, Upaisa, JazzCash, Easypaisa, and Raast.
 
 **Q: How do transaction fees work?**
 > **A:** Different payment providers charge different fees. MoneyFlow displays the net amount (after fees) for each transaction.

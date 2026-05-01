@@ -80,9 +80,9 @@ export const PAYMENT_METHODS = {
     description: 'Check payment',
   },
   upi: {
-    label: 'UPI',
+    label: 'Upaisa',
     icon: 'Smartphone',
-    description: 'UPI payment',
+    description: 'Upaisa payment',
   },
   other: {
     label: 'Other',

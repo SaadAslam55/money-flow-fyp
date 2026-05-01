@@ -281,7 +281,7 @@ CREATE TABLE transactions (
   description TEXT,
   reference_type VARCHAR(50),
   reference_id UUID,
-  payment_method VARCHAR(50) CHECK (payment_method IN ('cash', 'bank_transfer', 'card', 'check', 'upi', 'other')),
+  payment_method VARCHAR(50) CHECK (payment_method IN ('cash', 'bank_transfer', 'card', 'check', 'other')),
   bank_account_id UUID REFERENCES bank_accounts(id),
   receipt_url TEXT,
   created_by UUID NOT NULL REFERENCES users(id),

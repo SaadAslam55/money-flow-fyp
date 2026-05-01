@@ -209,7 +209,7 @@ export const PAYMENT_METHODS: PaymentMethodConfig[] = [
   },
   {
     value: 'upi',
-    label: 'UPI',
+    label: 'Upaisa',
     icon: 'Smartphone',
     description: 'Unified Payments Interface',
   },
