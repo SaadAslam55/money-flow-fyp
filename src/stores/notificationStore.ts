@@ -108,8 +108,25 @@ export const useNotificationStore = create<NotificationState>()(
   persist(
     (set, get) => ({
       // Initial state
-      notifications: [],
-      unreadCount: 0,
+      notifications: [
+        {
+          id: 'welcome-1',
+          type: 'success',
+          title: 'System Ready',
+          message: 'Notification system is now active and connected.',
+          read: false,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 'welcome-2',
+          type: 'info',
+          title: 'Tip',
+          message: 'You can mark notifications as read or clear them all.',
+          read: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+        }
+      ],
+      unreadCount: 2,
       maxNotifications: DEFAULT_MAX_NOTIFICATIONS,
 
       addNotification: (notification) => {

@@ -12,7 +12,10 @@ import { getInitials, cn } from '@/lib/utils';
 import { useNavigationStore } from '@/stores/navigationStore';
 import { OrganizationSwitcher } from '@/components/common/OrganizationSwitcher';
 import { globalSearch, type SearchResult } from '@/services/api/searchApi';
+import { useNotificationStore } from '@/stores/notificationStore';
 import { logger } from '@/lib/logger';
+import { formatDistanceToNow } from 'date-fns';
+import { Trash2, CheckCircle2, Info, AlertTriangle, XCircle, ExternalLink } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,6 +46,8 @@ export function Navbar({ onMenuClick, showSearch = true, className }: NavbarProp
   const { user, organization, signOut } = useAuth();
   const navigate = useNavigate();
   const { toggleDrawer, toggleSidebar, toggleSearch } = useNavigationStore();
+  const { unreadCount, getRecentNotifications, markAllAsRead, clearAll, markAsRead } = useNotificationStore();
+  const notifications = getRecentNotifications(10);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -262,20 +267,123 @@ export function Navbar({ onMenuClick, showSearch = true, className }: NavbarProp
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="h-5 w-5" />
                   <span className="sr-only">Notifications</span>
-                  <Badge
-                    variant="destructive"
-                    className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs"
-                  >
-                    3
-                  </Badge>
+                  {unreadCount > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs animate-in zoom-in duration-300"
+                    >
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </Badge>
+                  )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
-                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <div className="p-4 text-center text-sm text-muted-foreground">
-                  No new notifications
+              <DropdownMenuContent align="end" className="w-80 sm:w-96 p-0 overflow-hidden">
+                <div className="flex items-center justify-between p-4 border-b">
+                  <DropdownMenuLabel className="p-0 font-bold">Notifications</DropdownMenuLabel>
+                  {notifications.length > 0 && (
+                    <div className="flex gap-2">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 px-2 text-xs text-primary hover:text-primary/80"
+                        onClick={() => markAllAsRead()}
+                      >
+                        Mark all read
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 px-2 text-xs text-muted-foreground hover:text-destructive"
+                        onClick={() => clearAll()}
+                      >
+                        <Trash2 className="h-3 w-3 mr-1" />
+                        Clear
+                      </Button>
+                    </div>
+                  )}
                 </div>
+                
+                <div className="max-h-[400px] overflow-y-auto">
+                  {notifications.length > 0 ? (
+                    <div className="divide-y">
+                      {notifications.map((notification) => (
+                        <div 
+                          key={notification.id}
+                          className={cn(
+                            "p-4 transition-colors hover:bg-muted/50 cursor-pointer relative group",
+                            !notification.read && "bg-blue-50/30 dark:bg-blue-900/10"
+                          )}
+                          onClick={() => {
+                            if (!notification.read) markAsRead(notification.id);
+                            if (notification.actionUrl) navigate(notification.actionUrl);
+                          }}
+                        >
+                          <div className="flex gap-3">
+                            <div className={cn(
+                              "mt-1 p-2 rounded-full flex-shrink-0",
+                              notification.type === 'info' && "bg-blue-100 text-blue-600",
+                              notification.type === 'success' && "bg-green-100 text-green-600",
+                              notification.type === 'warning' && "bg-yellow-100 text-yellow-600",
+                              notification.type === 'error' && "bg-red-100 text-red-600",
+                            )}>
+                              {notification.type === 'info' && <Info className="h-4 w-4" />}
+                              {notification.type === 'success' && <CheckCircle2 className="h-4 w-4" />}
+                              {notification.type === 'warning' && <AlertTriangle className="h-4 w-4" />}
+                              {notification.type === 'error' && <XCircle className="h-4 w-4" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex justify-between items-start mb-1">
+                                <p className={cn(
+                                  "text-sm leading-none",
+                                  !notification.read ? "font-bold" : "font-medium"
+                                )}>
+                                  {notification.title}
+                                </p>
+                                <span className="text-[10px] text-muted-foreground whitespace-nowrap ml-2">
+                                  {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                                </span>
+                              </div>
+                              <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+                                {notification.message}
+                              </p>
+                              {notification.actionUrl && (
+                                <div className="flex items-center text-[11px] font-semibold text-primary">
+                                  {notification.actionLabel || 'View Details'}
+                                  <ExternalLink className="h-3 w-3 ml-1" />
+                                </div>
+                              )}
+                            </div>
+                            {!notification.read && (
+                              <div className="absolute right-2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary" />
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="py-12 flex flex-col items-center justify-center text-center px-4">
+                      <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-3">
+                        <Bell className="h-6 w-6 text-muted-foreground" />
+                      </div>
+                      <p className="text-sm font-medium">No notifications yet</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        When you have updates, they'll appear here.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
+                {notifications.length > 0 && (
+                  <div className="p-2 border-t bg-muted/20">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full text-xs font-semibold"
+                      onClick={() => navigate('/settings')}
+                    >
+                      View All Settings
+                    </Button>
+                  </div>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
 

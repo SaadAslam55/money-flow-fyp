@@ -12,6 +12,7 @@ import { queryClient } from '@/lib/api/query-client';
 import { initFeatureFlags } from '@/lib/api/feature-flags';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { NotificationListener } from '@/components/common/NotificationListener';
 import { validateEnvironment, isDevelopment } from '@/config/environment';
 import { logger } from '@/lib/logger';
 
@@ -51,6 +52,7 @@ export function AppProviders({ children }: AppProvidersProps) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <AppInitializer>{children}</AppInitializer>
+          <NotificationListener />
 
           {/* Toast Notifications */}
           <Toaster

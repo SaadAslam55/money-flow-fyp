@@ -177,6 +177,27 @@ export function NotificationSettings() {
             Email Notifications
           </CardTitle>
           <CardDescription>Choose which emails you want to receive</CardDescription>
+          <div className="mt-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => {
+                const addNotification = (window as any).__addNotification;
+                if (addNotification) {
+                  addNotification({
+                    type: 'success',
+                    title: 'Test Notification',
+                    message: 'This is a test notification to verify the system is working!',
+                    actionLabel: 'Settings',
+                    actionUrl: '/settings?tab=notifications'
+                  });
+                }
+              }}
+            >
+              <Bell className="mr-2 h-4 w-4" />
+              Send Test Notification
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Master Toggle */}
