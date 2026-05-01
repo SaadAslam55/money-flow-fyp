@@ -1,0 +1,106 @@
+# Supabase Configuration
+# Production-ready configuration for Money Flow application
+#
+# This file configures the Supabase project settings including:
+# - Database settings
+# - API settings
+# - Auth settings
+# - Storage settings
+# - Edge Functions settings
+#
+# @see https://supabase.com/docs/reference/cli/config-toml
+
+# API configuration
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+# Database configuration
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+# Studio configuration (Supabase Dashboard)
+[studio]
+enabled = true
+port = 54323
+api_url = "http://127.0.0.1:54321"
+
+# Auth configuration
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["https://localhost:5173"]
+jwt_expiry = 3600
+enable_signup = true
+
+# Auth email templates
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+
+# Email confirmation template
+[auth.email.template.confirmation]
+subject = "Welcome to Money Flow - Confirm Your Email"
+content_path = "./supabase/templates/confirmation.html"
+
+# Password recovery template
+[auth.email.template.recovery]
+subject = "Reset Your Money Flow Password"
+content_path = "./supabase/templates/recovery.html"
+
+# User invitation template
+[auth.email.template.invite]
+subject = "You're Invited to Join Money Flow"
+content_path = "./supabase/templates/invite.html"
+
+# Magic link template
+[auth.email.template.magic_link]
+subject = "Your Money Flow Sign-In Link"
+content_path = "./supabase/templates/magic_link.html"
+
+# Email change template
+[auth.email.template.email_change]
+subject = "Confirm Your New Email Address - Money Flow"
+content_path = "./supabase/templates/confirmation.html"
+
+# Storage configuration
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+# Storage buckets will be created via migrations
+
+# Edge Functions configuration
+[functions]
+[functions.verify_jwt]
+enabled = false
+
+# Realtime configuration
+[realtime]
+enabled = true
+ip_version = "IPv4"
+
+# Analytics configuration (for local development)
+[analytics]
+enabled = false
+
+# Inbucket (email testing) configuration
+[inbucket]
+enabled = true
+port = 54324
+smtp_port = 54325
+pop3_port = 54326
+
+# Postgres configuration
+[db.pooler]
+enabled = false
+port = 54329
+pool_mode = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+

@@ -1,0 +1,36 @@
+{
+  "name": "moneyflow-edge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MoneyFlow Edge API - Cloudflare Workers",
+  "scripts": {
+    "dev": "wrangler dev",
+    "dev:local": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:dev": "wrangler deploy --env development",
+    "tail": "wrangler tail",
+    "tail:staging": "wrangler tail --env staging",
+    "metrics": "wrangler metrics",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "types": "wrangler types",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.85.0",
+    "hono": "^4.10.7",
+    "jose": "^5.10.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251126.0",
+    "@types/node": "^20.14.0",
+    "typescript": "^5.9.3",
+    "vitest": "^1.6.1",
+    "wrangler": "^3.114.15"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

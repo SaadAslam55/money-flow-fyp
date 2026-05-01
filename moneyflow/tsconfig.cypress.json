@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "types": ["cypress", "node"],
+    "resolveJsonModule": true
+  },
+  "include": ["cypress/**/*.ts", "cypress/**/*.tsx"],
+  "exclude": ["cypress/videos", "cypress/screenshots", "cypress/downloads", "node_modules"]
+}

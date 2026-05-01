@@ -1,0 +1,18 @@
+{
+  "id": "user-001",
+  "email": "test@example.com",
+  "password": "TestPassword123!",
+  "firstName": "Test",
+  "lastName": "User",
+  "fullName": "Test User",
+  "role": "admin",
+  "status": "active",
+  "emailVerified": true,
+  "twoFAEnabled": false,
+  "organization": {
+    "id": "org-001",
+    "name": "Test Organization",
+    "logo": "https://example.com/logo.png",
+    "currency": "USD"
+  }
+}

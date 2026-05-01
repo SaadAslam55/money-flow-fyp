@@ -1,0 +1,32 @@
+{
+  "id": "invoice-001",
+  "invoiceNumber": "INV-2025-001",
+  "customerId": "customer-001",
+  "issueDate": "2025-01-15",
+  "dueDate": "2025-02-15",
+  "status": "draft",
+  "subtotal": 1000.0,
+  "tax": 100.0,
+  "discount": 50.0,
+  "total": 1050.0,
+  "items": [
+    {
+      "id": "item-001",
+      "description": "Test Product 1",
+      "quantity": 1,
+      "unitPrice": 500.0,
+      "taxRate": 10,
+      "lineTotal": 550.0
+    },
+    {
+      "id": "item-002",
+      "description": "Test Product 2",
+      "quantity": 1,
+      "unitPrice": 500.0,
+      "taxRate": 10,
+      "lineTotal": 550.0
+    }
+  ],
+  "notes": "Thank you for your business",
+  "terms": "Payment due within 30 days"
+}

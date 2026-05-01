@@ -1,0 +1,97 @@
+{
+  // TypeScript Configuration
+  // Production-ready TypeScript configuration for Money Flow application.
+  // Enforces strict type checking, modern JavaScript features, and optimal build settings.
+  // See: https://www.typescriptlang.org/tsconfig
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2020", // Compile to ES2020 for modern browser support
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // Include ES2020 and DOM type definitions
+    "jsx": "react-jsx", // Use React 17+ JSX transform (no need to import React)
+    "useDefineForClassFields": true, // Use ECMAScript standard class field definitions
+
+    /* Modules */
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+
+    /* Emit */
+    "noEmit": true,
+    "isolatedModules": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true,
+
+    /* Interop Constraints */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking - Production Strict Settings */
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "exactOptionalPropertyTypes": false,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+
+    /* Path Mapping - Critical for imports */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/stores/*": ["./src/stores/*"],
+      "@/config/*": ["./src/config/*"],
+      "@/constants/*": ["./src/constants/*"],
+      "@/schemas/*": ["./src/schemas/*"],
+      "@/contexts/*": ["./src/contexts/*"],
+      "@/assets/*": ["./src/assets/*"],
+      "@/design-system/*": ["./src/design-system/*"]
+    },
+
+    /* Additional Options */
+    "skipLibCheck": true, // Skip type checking of declaration files (faster compilation)
+    "incremental": true, // Enable incremental compilation for faster rebuilds
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo", // Location for incremental build info
+
+    /* Performance Optimizations */
+    "assumeChangesOnlyAffectDirectDependencies": true // Optimize incremental builds
+  },
+  "include": [
+    // Include all source files
+    "src",
+    "src/**/*",
+    // Include configuration files that use TypeScript
+    "vite.config.ts",
+    "vitest.config.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": [
+    // Exclude build outputs and dependencies
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    // Exclude test files (handled by vitest.config.ts)
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
+}

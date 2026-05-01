@@ -1,0 +1,695 @@
+/* Import design tokens and animations */
+@import './variables.css';
+@import './animations.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 238.7 83.5% 66.7%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 238.7 83.5% 66.7%;
+    --radius: 0.5rem;
+    --success: 142.1 76.2% 36.3%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 0 0% 100%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 100%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 238.7 83.5% 66.7%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 238.7 83.5% 66.7%;
+    --success: 142.1 70.6% 45.3%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    /* Smooth scrolling with respect for user preferences */
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      'Roboto',
+      'Oxygen',
+      'Ubuntu',
+      'Cantarell',
+      'Fira Sans',
+      'Droid Sans',
+      'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+    /* Better touch scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Respect safe area insets on mobile */
+    padding-top: var(--safe-area-inset-top);
+    padding-right: var(--safe-area-inset-right);
+    padding-bottom: var(--safe-area-inset-bottom);
+    padding-left: var(--safe-area-inset-left);
+  }
+
+  /* Custom scrollbar - Modern, accessible design */
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-width);
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary;
+    border-radius: var(--scrollbar-track-radius);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-muted-foreground/30;
+    border-radius: var(--scrollbar-thumb-radius);
+    transition: background-color var(--transition-base) var(--ease-out);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    @apply bg-muted-foreground/70;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) hsl(var(--secondary));
+  }
+
+  /* Focus visible styles - Enhanced accessibility */
+  *:focus-visible {
+    @apply outline-none ring-ring ring-offset-background;
+    outline-width: var(--ring-width);
+    outline-offset: var(--ring-offset-width);
+    outline-color: hsl(var(--ring));
+    outline-style: solid;
+  }
+
+  /* Remove focus styles for mouse users, keep for keyboard */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+
+  ::-moz-selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Typography utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Custom container - Mobile-first responsive */
+  .container-custom {
+    @apply container mx-auto;
+    padding-left: max(var(--spacing-md), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-md), env(safe-area-inset-right));
+  }
+
+  @media (min-width: 640px) {
+    .container-custom {
+      padding-left: max(var(--spacing-lg), env(safe-area-inset-left));
+      padding-right: max(var(--spacing-lg), env(safe-area-inset-right));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-custom {
+      padding-left: max(var(--spacing-xl), env(safe-area-inset-left));
+      padding-right: max(var(--spacing-xl), env(safe-area-inset-right));
+    }
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent;
+  }
+
+  /* Glass effect - Modern frosted glass */
+  .glass {
+    @apply border border-white/20 bg-white/80 backdrop-blur-md;
+    backdrop-filter: blur(var(--blur-lg));
+    -webkit-backdrop-filter: blur(var(--blur-lg));
+  }
+
+  .dark .glass {
+    @apply border border-gray-800/20 bg-gray-900/80;
+    backdrop-filter: blur(var(--blur-lg));
+    -webkit-backdrop-filter: blur(var(--blur-lg));
+  }
+
+  /* Glass variants */
+  .glass-sm {
+    backdrop-filter: blur(var(--blur-sm));
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+  }
+
+  .glass-lg {
+    backdrop-filter: blur(var(--blur-xl));
+    -webkit-backdrop-filter: blur(var(--blur-xl));
+  }
+
+  /* Custom shadows - Modern elevation system */
+  .shadow-glow {
+    box-shadow: var(--shadow-primary);
+  }
+
+  .shadow-glow-lg {
+    box-shadow: var(--shadow-primary-lg);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .shadow-card-hover {
+    box-shadow: var(--shadow-lg);
+    transition: box-shadow var(--transition-base) var(--ease-out);
+  }
+
+  /* Touch target utilities - Accessibility */
+  .touch-target {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+
+  .touch-target-comfortable {
+    min-width: var(--touch-target-comfortable);
+    min-height: var(--touch-target-comfortable);
+  }
+
+  /* Safe area utilities for mobile */
+  .safe-top {
+    padding-top: var(--safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: var(--safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: var(--safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: var(--safe-area-inset-right);
+  }
+
+  /* Container query utilities */
+  @container (min-width: 640px) {
+    .container-md\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Aspect ratio utilities */
+  .aspect-golden {
+    aspect-ratio: var(--aspect-golden);
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  @page {
+    margin: 1cm;
+    size: A4;
+  }
+
+  body {
+    @apply bg-white text-black;
+  }
+
+  .print-full-width {
+    width: 100% !important;
+  }
+
+  .print-break-after {
+    page-break-after: always;
+  }
+
+  .print-break-before {
+    page-break-before: always;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+  }
+}
+
+/* Loading states - Moved to animations.css */
+
+/* Skeleton loader - Enhanced with shimmer effect */
+.skeleton {
+  @apply animate-pulse rounded bg-muted;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-text {
+  @apply h-4 animate-pulse rounded bg-muted;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-text::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-circle {
+  @apply animate-pulse rounded-full bg-muted;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-circle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 2s infinite;
+  border-radius: 50%;
+}
+
+/* Status badges */
+.badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+}
+
+.badge-error {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+}
+
+.badge-info {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
+}
+
+.badge-default {
+  @apply bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200;
+}
+
+/* Table styles - Modern, responsive design */
+.table-wrapper {
+  @apply w-full overflow-x-auto rounded-lg border;
+  /* Smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.table-custom {
+  @apply w-full text-left text-sm;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-custom thead {
+  @apply bg-muted text-xs font-semibold uppercase text-muted-foreground;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-custom th {
+  @apply px-4 py-3 sm:px-6;
+  white-space: nowrap;
+}
+
+.table-custom td {
+  @apply border-t px-4 py-3 sm:px-6;
+  white-space: nowrap;
+}
+
+.table-custom tbody tr {
+  @apply transition-colors hover:bg-muted/50;
+  transition-duration: var(--transition-base);
+}
+
+.table-custom tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive table on mobile */
+@media (max-width: 640px) {
+  .table-custom {
+    font-size: var(--font-size-xs);
+  }
+
+  .table-custom th,
+  .table-custom td {
+    @apply px-2 py-2;
+  }
+}
+
+/* Form enhancements - Accessible, modern design */
+.form-label {
+  @apply mb-2 block text-sm font-medium;
+  min-height: var(--touch-target-min);
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  @apply w-full rounded-md border px-3 py-2 shadow-sm 
+         focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary
+         disabled:cursor-not-allowed disabled:opacity-50;
+  min-height: var(--touch-target-min);
+  transition: all var(--transition-base) var(--ease-out);
+  font-size: 16px; /* Prevents zoom on iOS */
+}
+
+.form-input:focus {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.form-error {
+  @apply mt-1 text-sm text-destructive;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.form-helper {
+  @apply mt-1 text-sm text-muted-foreground;
+}
+
+/* Form group spacing */
+.form-group {
+  @apply mb-4;
+}
+
+.form-group:last-child {
+  @apply mb-0;
+}
+
+/* Card animations - Smooth, performant */
+.card-hover {
+  @apply transition-all hover:-translate-y-1;
+  transition-duration: var(--transition-slow);
+  transition-timing-function: var(--ease-out);
+}
+
+.card-hover:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-4px);
+}
+
+/* Card variants */
+.card-interactive {
+  @apply cursor-pointer transition-all;
+  transition-duration: var(--transition-base);
+}
+
+.card-interactive:active {
+  transform: scale(0.98);
+}
+
+/* Responsive utilities - Mobile-first approach */
+.mobile-full-width {
+  @apply w-full;
+}
+
+.mobile-hide {
+  @apply hidden sm:block;
+}
+
+.mobile-stack {
+  @apply flex-col sm:flex-row;
+}
+
+.mobile-center {
+  @apply text-center sm:text-left;
+}
+
+/* Tablet utilities */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .tablet-hide {
+    @apply hidden;
+  }
+}
+
+/* Desktop utilities */
+@media (min-width: 1024px) {
+  .desktop-hide {
+    @apply hidden;
+  }
+}
+
+/* Container queries for component-level responsiveness */
+@container (max-width: 640px) {
+  .container-mobile-stack {
+    @apply flex-col;
+  }
+}
+
+/* Accessibility improvements - WCAG 2.1 AA compliant */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 
+         focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 
+         focus:text-primary-foreground;
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor;
+  }
+
+  .sr-only:focus {
+    clip: auto;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus within for better keyboard navigation */
+.focus-within-ring:focus-within {
+  @apply ring-2 ring-ring ring-offset-2;
+  outline: none;
+}
+
+/* Global focus-visible styles for all interactive elements */
+@layer base {
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    @apply ring-2 ring-ring ring-offset-2 outline-none transition-shadow duration-150;
+    border-radius: var(--radius);
+  }
+}
+
+/* Toast/notification animations - Moved to animations.css */
+.toast-enter {
+  animation: toast-enter var(--duration-slow) var(--ease-out);
+}
+
+.toast-exit {
+  animation: toast-exit var(--duration-base) var(--ease-in);
+}
+
+/* Additional utility classes */
+.gradient-mask {
+  mask-image: linear-gradient(to bottom, black, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: var(--ease-out);
+  transition-duration: var(--transition-base);
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ============================================
+   Micro-interactions & Polish
+   ============================================ */
+
+/* Button hover lift effect */
+@layer components {
+  .btn-interactive {
+    @apply transition-all duration-200 ease-out;
+  }
+  .btn-interactive:hover {
+    @apply scale-[1.02] shadow-md;
+  }
+  .btn-interactive:active {
+    @apply scale-[0.98];
+  }
+
+  /* Card hover with border glow */
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  .card-hover:hover {
+    @apply shadow-lg border-primary/20;
+  }
+
+  /* Input focus with smooth ring */
+  .input-smooth:focus,
+  .input-smooth:focus-visible {
+    @apply ring-2 ring-primary/30 border-primary transition-all duration-200;
+  }
+
+  /* Table row hover highlight */
+  .table-row-hover {
+    @apply transition-colors duration-150;
+  }
+  .table-row-hover:hover {
+    @apply bg-muted/50;
+  }
+
+  /* Nav item active indicator animation */
+  .nav-active-indicator {
+    @apply absolute left-0 h-8 w-1 rounded-r-full bg-primary;
+    transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

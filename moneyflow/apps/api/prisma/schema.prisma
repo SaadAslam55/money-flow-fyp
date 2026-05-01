@@ -1,0 +1,265 @@
+// Prisma Schema for TiDB Cloud
+// This schema is optimized for TiDB's distributed architecture
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("TIDB_DATABASE_URL")
+}
+
+// ============================================================================
+// ORGANIZATIONS
+// ============================================================================
+
+model Organization {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  logo_url        String?
+  settings        Json     @default("{}")
+  subscription_tier String  @default("free")
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  users         User[]
+  customers     Customer[]
+  products      Product[]
+  invoices      Invoice[]
+  transactions  Transaction[]
+  
+  @@index([slug])
+  @@index([created_at])
+  @@map("organizations")
+}
+
+// ============================================================================
+// USERS
+// ============================================================================
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  password_hash   String
+  full_name       String
+  avatar_url      String?
+  role            String   @default("member")
+  is_active       Boolean  @default(true)
+  last_login_at   DateTime?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Foreign Keys
+  organization_id String
+  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  // Relations
+  created_invoices  Invoice[]  @relation("CreatedBy")
+  
+  @@index([email])
+  @@index([organization_id])
+  @@index([role])
+  @@map("users")
+}
+
+// ============================================================================
+// CUSTOMERS
+// ============================================================================
+
+model Customer {
+  id              String   @id @default(cuid())
+  name            String
+  email           String?
+  phone           String?
+  company         String?
+  address         String?  @db.Text
+  city            String?
+  state           String?
+  country         String?
+  postal_code     String?
+  tax_id          String?
+  notes           String?  @db.Text
+  is_active       Boolean  @default(true)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Foreign Keys
+  organization_id String
+  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  // Relations
+  invoices        Invoice[]
+  transactions    Transaction[]
+  
+  @@index([organization_id])
+  @@index([email])
+  @@index([name])
+  @@index([created_at])
+  @@map("customers")
+}
+
+// ============================================================================
+// PRODUCTS
+// ============================================================================
+
+model Product {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?  @db.Text
+  sku             String?
+  barcode         String?
+  unit_price      Decimal  @db.Decimal(15, 2)
+  cost_price      Decimal? @db.Decimal(15, 2)
+  tax_rate        Decimal  @default(0) @db.Decimal(5, 2)
+  quantity        Int      @default(0)
+  low_stock_alert Int      @default(10)
+  category        String?
+  is_active       Boolean  @default(true)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Foreign Keys
+  organization_id String
+  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  // Relations
+  invoice_items   InvoiceItem[]
+  
+  @@unique([organization_id, sku])
+  @@index([organization_id])
+  @@index([name])
+  @@index([category])
+  @@index([sku])
+  @@map("products")
+}
+
+// ============================================================================
+// INVOICES
+// ============================================================================
+
+model Invoice {
+  id              String   @id @default(cuid())
+  invoice_number  String
+  status          String   @default("draft") // draft, sent, paid, overdue, cancelled
+  issue_date      DateTime @default(now())
+  due_date        DateTime
+  subtotal        Decimal  @db.Decimal(15, 2)
+  tax_amount      Decimal  @default(0) @db.Decimal(15, 2)
+  discount_amount Decimal  @default(0) @db.Decimal(15, 2)
+  total_amount    Decimal  @db.Decimal(15, 2)
+  amount_paid     Decimal  @default(0) @db.Decimal(15, 2)
+  currency        String   @default("USD")
+  notes           String?  @db.Text
+  terms           String?  @db.Text
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Foreign Keys
+  organization_id String
+  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  
+  customer_id     String
+  customer        Customer @relation(fields: [customer_id], references: [id])
+  
+  created_by_id   String
+  created_by      User @relation("CreatedBy", fields: [created_by_id], references: [id])
+
+  // Relations
+  items           InvoiceItem[]
+  transactions    Transaction[]
+  
+  @@unique([organization_id, invoice_number])
+  @@index([organization_id])
+  @@index([customer_id])
+  @@index([status])
+  @@index([issue_date])
+  @@index([due_date])
+  @@index([created_at])
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id              String   @id @default(cuid())
+  description     String
+  quantity        Decimal  @db.Decimal(10, 2)
+  unit_price      Decimal  @db.Decimal(15, 2)
+  tax_rate        Decimal  @default(0) @db.Decimal(5, 2)
+  discount        Decimal  @default(0) @db.Decimal(15, 2)
+  total           Decimal  @db.Decimal(15, 2)
+  sort_order      Int      @default(0)
+
+  // Foreign Keys
+  invoice_id      String
+  invoice         Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  
+  product_id      String?
+  product         Product? @relation(fields: [product_id], references: [id])
+  
+  @@index([invoice_id])
+  @@index([product_id])
+  @@map("invoice_items")
+}
+
+// ============================================================================
+// TRANSACTIONS
+// ============================================================================
+
+model Transaction {
+  id              String   @id @default(cuid())
+  type            String   // income, expense, transfer
+  amount          Decimal  @db.Decimal(15, 2)
+  currency        String   @default("USD")
+  description     String?
+  category        String?
+  payment_method  String?  // cash, card, bank_transfer, etc.
+  reference       String?
+  transaction_date DateTime @default(now())
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Foreign Keys
+  organization_id String
+  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  
+  customer_id     String?
+  customer        Customer? @relation(fields: [customer_id], references: [id])
+  
+  invoice_id      String?
+  invoice         Invoice? @relation(fields: [invoice_id], references: [id])
+  
+  @@index([organization_id])
+  @@index([type])
+  @@index([category])
+  @@index([transaction_date])
+  @@index([created_at])
+  @@map("transactions")
+}
+
+// ============================================================================
+// AUDIT LOG (for compliance and debugging)
+// ============================================================================
+
+model AuditLog {
+  id              String   @id @default(cuid())
+  entity_type     String   // user, invoice, customer, etc.
+  entity_id       String
+  action          String   // create, update, delete
+  old_values      Json?
+  new_values      Json?
+  ip_address      String?
+  user_agent      String?
+  created_at      DateTime @default(now())
+
+  // Foreign Keys
+  organization_id String
+  user_id         String?
+  
+  @@index([organization_id])
+  @@index([entity_type, entity_id])
+  @@index([user_id])
+  @@index([created_at])
+  @@map("audit_logs")
+}

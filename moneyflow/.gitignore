@@ -1,0 +1,93 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+tests/results/
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+
+# Production
+dist/
+build/
+
+# Environment Files
+# Note: .env.example files are templates (committed)
+# All actual .env files with secrets are gitignored
+.env
+.env.local
+.env.*.local
+.env.development
+.env.staging
+.env.production
+*.env.local
+
+# Logs
+logs/
+*.log
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.pem
+.cache/
+*.tsbuildinfo
+**/*.d.ts
+!src/vite-env.d.ts
+!src/workers/worker.d.ts
+
+# Supabase
+.branches/
+.temp/
+
+# PWA
+dev-dist/
+
+.vercel
+
+# TiDB Migration
+.env.tidb
+.env.tidb.local
+certs/*.pem
+certs/*.crt
+certs/*.key
+apps/api/.env
+apps/api/.env.local
+apps/api/node_modules/
+apps/api/dist/
+
+# Prisma
+apps/api/prisma/migrations/*.sql.backup
+
+# Cloudflare Workers
+workers/**/node_modules/
+workers/**/.dev.vars
+workers/**/wrangler.toml.local
+
+# Redis
+dump.rdb
+
+# Render
+.render/
+
+# Test artifacts
+playwright-report/
+test-results/
+*.test.log
+test-output.json
+
+# AI/IDE tools
+.qodo/
+.cursor/
+.aider*

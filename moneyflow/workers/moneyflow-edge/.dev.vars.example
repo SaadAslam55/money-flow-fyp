@@ -1,0 +1,22 @@
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║     LOCAL DEVELOPMENT VARIABLES - Cloudflare Workers                      ║
+# ║                                                                           ║
+# ║  Copy this file to .dev.vars for local development                        ║
+# ║  These override wrangler.toml values during `wrangler dev`               ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# Supabase
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_JWT_SECRET=your-jwt-secret
+SUPABASE_SERVICE_KEY=your-service-role-key
+
+# Origin API
+ORIGIN_API_URL=http://localhost:3001
+
+# Admin
+ADMIN_API_KEY=your-local-admin-key
+
+# Environment
+ENVIRONMENT=development
+ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000

@@ -1,0 +1,35 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.local
+.env.*.local
+.DS_Store
+dist
+build
+coverage
+.vscode
+.idea
+*.swp
+*.swo
+.next
+out
+*.log
+.turbo
+.cache
+# E2E tests and temporary files
+tests/results
+cypress/screenshots
+cypress/videos
+playwright/screenshots
+playwright/videos
+.vitest
+vitest.workspace.ts
+# Supabase local
+.supabase
+# Misc
+README.md
+CHANGELOG.md
+LICENSE
+.editorconfig

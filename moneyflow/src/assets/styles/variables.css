@@ -1,0 +1,296 @@
+/**
+ * Design Tokens & CSS Variables
+ * Modern, scalable design system variables
+ */
+
+:root {
+  /* ============================================
+     Spacing Scale (8px base unit)
+     ============================================ */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+  --spacing-3xl: 4rem; /* 64px */
+  --spacing-4xl: 6rem; /* 96px */
+
+  /* ============================================
+     Typography Scale
+     ============================================ */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 3.75rem; /* 60px */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+
+  /* ============================================
+     Border Radius
+     ============================================ */
+  --radius-none: 0;
+  --radius-sm: 0.125rem; /* 2px */
+  --radius-md: 0.375rem; /* 6px */
+  --radius-lg: 0.5rem; /* 8px */
+  --radius-xl: 0.75rem; /* 12px */
+  --radius-2xl: 1rem; /* 16px */
+  --radius-3xl: 1.5rem; /* 24px */
+  --radius-full: 9999px;
+
+  /* ============================================
+     Shadows & Elevation
+     ============================================ */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+  /* Colored shadows for primary */
+  --shadow-primary: 0 10px 25px -5px hsl(var(--primary) / 0.3);
+  --shadow-primary-lg: 0 20px 40px -10px hsl(var(--primary) / 0.4);
+
+  /* ============================================
+     Z-Index Scale
+     ============================================ */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+  --z-max: 9999;
+
+  /* ============================================
+     Breakpoints (for container queries & media queries)
+     ============================================ */
+  --breakpoint-xs: 20rem; /* 320px */
+  --breakpoint-sm: 24rem; /* 384px */
+  --breakpoint-md: 28rem; /* 448px */
+  --breakpoint-lg: 32rem; /* 512px */
+  --breakpoint-xl: 36rem; /* 576px */
+  --breakpoint-2xl: 42rem; /* 672px */
+  --breakpoint-3xl: 48rem; /* 768px */
+  --breakpoint-4xl: 56rem; /* 896px */
+  --breakpoint-5xl: 64rem; /* 1024px */
+  --breakpoint-6xl: 72rem; /* 1152px */
+  --breakpoint-7xl: 80rem; /* 1280px */
+
+  /* ============================================
+     Transitions & Timing
+     ============================================ */
+  --transition-fast: 150ms;
+  --transition-base: 200ms;
+  --transition-slow: 300ms;
+  --transition-slower: 500ms;
+
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* ============================================
+     Layout & Container
+     ============================================ */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1400px;
+
+  --header-height: 4rem; /* 64px */
+  --sidebar-width: 16rem; /* 256px */
+  --sidebar-width-collapsed: 4rem; /* 64px */
+  --footer-height: 3rem; /* 48px */
+
+  /* ============================================
+     Grid & Layout
+     ============================================ */
+  --grid-columns: 12;
+  --grid-gap: 1rem;
+
+  /* ============================================
+     Aspect Ratios
+     ============================================ */
+  --aspect-square: 1 / 1;
+  --aspect-video: 16 / 9;
+  --aspect-portrait: 3 / 4;
+  --aspect-landscape: 4 / 3;
+  --aspect-golden: 1.618 / 1;
+
+  /* ============================================
+     Blur & Backdrop
+     ============================================ */
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+  --blur-2xl: 40px;
+  --blur-3xl: 64px;
+
+  /* ============================================
+     Opacity Scale
+     ============================================ */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
+
+  /* ============================================
+     Border Width
+     ============================================ */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+  --border-width-8: 8px;
+
+  /* ============================================
+     Animation Durations
+     ============================================ */
+  --duration-instant: 0ms;
+  --duration-fast: 100ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  --duration-slowest: 1000ms;
+
+  /* ============================================
+     Animation Delays
+     ============================================ */
+  --delay-none: 0ms;
+  --delay-fast: 50ms;
+  --delay-base: 100ms;
+  --delay-slow: 200ms;
+  --delay-slower: 300ms;
+
+  /* ============================================
+     Scrollbar
+     ============================================ */
+  --scrollbar-width: 8px;
+  --scrollbar-width-thin: 4px;
+  --scrollbar-track-radius: 4px;
+  --scrollbar-thumb-radius: 4px;
+
+  /* ============================================
+     Focus Ring
+     ============================================ */
+  --ring-width: 2px;
+  --ring-offset-width: 2px;
+  --ring-offset-color: hsl(var(--background));
+
+  /* ============================================
+     Safe Area Insets (for mobile devices)
+     ============================================ */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-right: env(safe-area-inset-right);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+
+  /* ============================================
+     Touch Target Sizes (Accessibility)
+     ============================================ */
+  --touch-target-min: 44px; /* Minimum touch target size */
+  --touch-target-comfortable: 48px; /* Comfortable touch target */
+
+  /* ============================================
+     Viewport Units (for mobile)
+     ============================================ */
+  --vh: 1vh; /* Will be updated via JS for mobile browsers */
+  --vw: 1vw;
+  --vmin: 1vmin;
+  --vmax: 1vmax;
+}
+
+/* ============================================
+   Dark Mode Overrides (if needed)
+   ============================================ */
+.dark {
+  /* Override any dark mode specific variables here */
+  --shadow-primary: 0 10px 25px -5px hsl(var(--primary) / 0.4);
+  --shadow-primary-lg: 0 20px 40px -10px hsl(var(--primary) / 0.5);
+}
+
+/* ============================================
+   Reduced Motion (Accessibility)
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-base: 0ms;
+    --transition-slow: 0ms;
+    --transition-slower: 0ms;
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+    --duration-slowest: 0ms;
+  }
+}
+
+/* ============================================
+   High Contrast Mode (Accessibility)
+   ============================================ */
+@media (prefers-contrast: high) {
+  :root {
+    --border-width-1: 2px;
+    --ring-width: 3px;
+  }
+}
+
+/* ============================================
+   Print Media
+   ============================================ */
+@media print {
+  :root {
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-xl: none;
+    --shadow-2xl: none;
+  }
+}
+

@@ -1,0 +1,158 @@
+version: '3.9'
+
+services:
+  # Development Frontend Service
+  app-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: moneyflow-dev
+    ports:
+      - '5173:5173'
+      - '4173:4173'
+    environment:
+      - NODE_ENV=development
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-http://supabase:54321}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY:-your-key}
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
+      - VITE_STRIPE_PUBLIC_KEY=${VITE_STRIPE_PUBLIC_KEY:-}
+      - VITE_GA_TRACKING_ID=${VITE_GA_TRACKING_ID:-}
+      - VITE_SENTRY_DSN=${VITE_SENTRY_DSN:-}
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - /app/dist
+      - /app/.next
+    networks:
+      - moneyflow-network
+    depends_on:
+      - supabase
+    restart: unless-stopped
+    command: npm run dev -- --host 0.0.0.0
+
+  # Production Frontend Service
+  app-prod:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.prod
+    container_name: moneyflow-prod
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      - NODE_ENV=production
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_STRIPE_PUBLIC_KEY=${VITE_STRIPE_PUBLIC_KEY}
+      - VITE_GA_TRACKING_ID=${VITE_GA_TRACKING_ID}
+      - VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
+    volumes:
+      - moneyflow-dist:/usr/share/nginx/html:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - moneyflow-network
+    restart: always
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/index.html']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    depends_on:
+      - supabase
+
+  # PostgreSQL Database (via Supabase)
+  supabase:
+    image: supabase/supabase:latest
+    container_name: moneyflow-supabase
+    ports:
+      - '54321:54321'
+      - '54320:54320'
+      - '8000:8000'
+      - '8001:8001'
+      - '8002:8002'
+      - '8003:8003'
+    environment:
+      # Supabase configuration
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF8 --locale=en_US.UTF-8
+      - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
+      - POSTGRES_INITDB_WALDIR=/var/lib/postgresql/wal
+
+      # JWT configuration
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-token-change-me}
+      - JWT_EXPIRATION=${JWT_EXPIRATION:-3600}
+
+      # SMTP/Email configuration (optional)
+      - SMTP_ADMIN_EMAIL=${SMTP_ADMIN_EMAIL:-admin@example.com}
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
+    volumes:
+      - supabase-db:/var/lib/postgresql/data:Z
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - moneyflow-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache (optional but recommended)
+  redis:
+    image: redis:7-alpine
+    container_name: moneyflow-redis
+    ports:
+      - '6379:6379'
+    command: >
+      redis-server
+      --appendonly yes
+      --requirepass ${REDIS_PASSWORD:-your-redis-password}
+    volumes:
+      - redis-data:/data
+    networks:
+      - moneyflow-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Reverse Proxy (Nginx for production)
+  nginx:
+    image: nginx:alpine
+    container_name: moneyflow-nginx
+    ports:
+      - '8080:80'
+      - '8443:443'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - moneyflow-dist:/usr/share/nginx/html:ro
+    networks:
+      - moneyflow-network
+    depends_on:
+      - app-prod
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost/']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  supabase-db:
+    driver: local
+  redis-data:
+    driver: local
+  moneyflow-dist:
+    driver: local
+
+networks:
+  moneyflow-network:
+    driver: bridge

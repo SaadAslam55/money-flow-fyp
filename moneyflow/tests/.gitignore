@@ -1,0 +1,26 @@
+# Test results
+results/
+*.log
+*.json
+*.html
+*.lcov
+coverage/
+.nyc_output/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Vitest
+.vitest/
+vitest.config.ts.timestamp-*
+
+# Test artifacts
+*.snap
+*.test.js.snap
+
+# Temporary test files
+*.tmp
+*.temp
+

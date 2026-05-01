@@ -1,0 +1,42 @@
+# Development Dockerfile for Money Flow
+# This Dockerfile is optimized for development with fast rebuilds and hot reload support
+
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install additional dependencies needed for development
+RUN apk add --no-cache \
+    git \
+    bash \
+    curl \
+    python3 \
+    make \
+    g++
+
+# Copy package files
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy application source
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/dist /app/.next /app/coverage
+
+# Expose Vite dev server port
+EXPOSE 5173
+
+# Expose preview port
+EXPOSE 4173
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5173/index.html || exit 1
+
+# Start development server
+# Use --host to allow external connections to the dev server
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

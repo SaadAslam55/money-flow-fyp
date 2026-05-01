@@ -1,0 +1,36 @@
+# Build outputs
+dist/
+build/
+coverage/
+node_modules/
+
+# Config files
+*.config.{js,ts}
+vite.config.ts
+vitest.config.ts
+playwright.config.ts
+
+# Supabase functions (not part of main TypeScript project)
+supabase/
+
+# Test files
+tests/
+cypress/
+**/*.test.{ts,tsx}
+**/*.spec.{ts,tsx}
+
+# Scripts
+scripts/
+
+# Other
+.eslintrc.cjs
+
+# Workers (separate TypeScript project)
+workers/
+
+# NestJS backend (separate TypeScript project)
+apps/
+
+# Standalone scripts at root level
+verify_super_admin_frontend.ts
+

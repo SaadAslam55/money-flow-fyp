@@ -1,0 +1,39 @@
+# Supabase local development files
+.temp/
+.branches/
+.tags/
+*.log
+
+# Database dumps
+*.sql.gz
+*.dump
+
+# Environment files
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# Test files
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+

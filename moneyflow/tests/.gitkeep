@@ -1,0 +1,3 @@
+# This file ensures the tests/results directory is tracked by git
+# Test result files are gitignored but the directory structure is preserved
+

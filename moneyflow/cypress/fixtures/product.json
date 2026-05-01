@@ -1,0 +1,19 @@
+{
+  "id": "product-001",
+  "sku": "TEST-001",
+  "name": "Test Product",
+  "description": "This is a test product for Cypress E2E testing",
+  "category": "Services",
+  "unitPrice": 99.99,
+  "costPrice": 50.0,
+  "taxRate": 10,
+  "quantityOnHand": 100,
+  "quantityReserved": 10,
+  "lowStockLevel": 20,
+  "imageUrl": "https://example.com/product.png",
+  "status": "active",
+  "metadata": {
+    "supplier": "Test Supplier",
+    "warranty": "1 year"
+  }
+}

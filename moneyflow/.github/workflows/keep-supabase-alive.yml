@@ -1,0 +1,76 @@
+name: Keep Supabase Project Active
+
+on:
+  schedule:
+    # Runs every Monday and Thursday at 6:00 AM UTC (11:00 AM PKT)
+    - cron: '0 6 * * 1,4'
+  workflow_dispatch: # Allows manual trigger from Actions tab
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install @supabase/supabase-js
+      
+      - name: Ping Supabase Database
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          node << 'EOF'
+          const { createClient } = require('@supabase/supabase-js');
+          
+          const supabaseUrl = process.env.VITE_SUPABASE_URL;
+          const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+          
+          if (!supabaseUrl || !supabaseKey) {
+            console.error('❌ Missing Supabase credentials');
+            process.exit(1);
+          }
+          
+          const supabase = createClient(supabaseUrl, supabaseKey);
+          
+          (async () => {
+            try {
+              // Query the organizations table (core table in Money Flow)
+              const { data, error } = await supabase
+                .from('organizations')
+                .select('id')
+                .limit(1);
+              
+              if (error) {
+                console.error('❌ Database query failed:', error.message);
+                process.exit(1);
+              }
+              
+              console.log('✅ Successfully pinged Supabase database');
+              console.log('📊 Database is active and responsive');
+              console.log('⏰ Timestamp:', new Date().toISOString());
+              
+              // Optional: Check auth service
+              const { data: { session }, error: authError } = await supabase.auth.getSession();
+              console.log('🔐 Auth service is', authError ? 'offline' : 'online');
+              
+            } catch (err) {
+              console.error('❌ Unexpected error:', err.message);
+              process.exit(1);
+            }
+          })();
+          EOF
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "⚠️ Supabase ping failed! Check your credentials and project status."
+          echo "Visit https://supabase.com/dashboard to verify your project is active."
