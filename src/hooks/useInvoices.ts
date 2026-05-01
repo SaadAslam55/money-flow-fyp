@@ -24,10 +24,12 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Create invoice
   const createMutation = useMutation({
-    mutationFn: (data: InvoiceFormData) => {
+    mutationFn: async (data: InvoiceFormData) => {
       if (!organization?.id) throw new Error('Organization ID is required');
       if (!user?.id) throw new Error('User ID is required');
-      return invoiceApi.createInvoice(data, organization.id, user.id);
+      const result = await invoiceApi.createInvoice(data, organization.id, user.id);
+      if (result.error) throw result.error;
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
@@ -42,8 +44,11 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Update invoice
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<InvoiceFormData> }) =>
-      invoiceApi.updateInvoice(id, data),
+    mutationFn: async ({ id, data }: { id: string; data: Partial<InvoiceFormData> }) => {
+      const result = await invoiceApi.updateInvoice(id, data);
+      if (result.error) throw result.error;
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
       toast.success('Invoice updated successfully');
@@ -56,7 +61,11 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Delete invoice
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => invoiceApi.deleteInvoice(id),
+    mutationFn: async (id: string) => {
+      const result = await invoiceApi.deleteInvoice(id);
+      if (result.error) throw result.error;
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
@@ -70,8 +79,11 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Update status
   const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) =>
-      invoiceApi.updateInvoiceStatus(id, status),
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const result = await invoiceApi.updateInvoiceStatus(id, status);
+      if (result.error) throw result.error;
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
       toast.success('Invoice status updated');
@@ -84,7 +96,11 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Record payment
   const recordPaymentMutation = useMutation({
-    mutationFn: (payment: PaymentRecord) => invoiceApi.recordPayment(payment),
+    mutationFn: async (payment: PaymentRecord) => {
+      const result = await invoiceApi.recordPayment(payment);
+      if (result.error) throw result.error;
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
@@ -99,8 +115,11 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Send invoice
   const sendMutation = useMutation({
-    mutationFn: ({ id, email, message }: { id: string; email?: string; message?: string }) =>
-      invoiceApi.sendInvoice(id, email, message),
+    mutationFn: async ({ id, email, message }: { id: string; email?: string; message?: string }) => {
+      const result = await invoiceApi.sendInvoice(id, email, message);
+      if (result.error) throw result.error;
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
       toast.success('Invoice sent successfully');
@@ -113,9 +132,11 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Duplicate invoice
   const duplicateMutation = useMutation({
-    mutationFn: (id: string) => {
-      if (!organization?.id) throw new Error('Organization ID is required');
-      return invoiceApi.duplicateInvoice(id, organization.id);
+    mutationFn: async (id: string) => {
+      if (!user?.id) throw new Error('User ID is required');
+      const result = await invoiceApi.duplicateInvoice(id, user.id);
+      if (result.error) throw result.error;
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
@@ -129,7 +150,11 @@ export function useInvoices(filters?: InvoiceFilters, page: number = 1) {
 
   // Download PDF
   const downloadPDFMutation = useMutation({
-    mutationFn: (id: string) => invoiceApi.downloadInvoicePDF(id),
+    mutationFn: async (id: string) => {
+      const result = await invoiceApi.downloadInvoicePDF(id);
+      if (result.error) throw result.error;
+      return result;
+    },
     onSuccess: () => {
       toast.success('PDF downloaded successfully');
     },

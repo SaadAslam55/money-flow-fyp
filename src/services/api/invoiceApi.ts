@@ -76,7 +76,7 @@ export async function createInvoice(
 
     // Generate invoice number using RPC function
     const { data: invoiceNumber, error: numberError } = await supabase
-      .rpc('generate_invoice_number', { org_id: organizationId });
+      .rpc('generate_invoice_number', { p_org_id: organizationId });
 
     if (numberError) throw numberError;
 
