@@ -76,7 +76,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       organization: null,
       isAuthenticated: false,
-      loading: false, // Start false — initializeAuth will set true when needed
+      loading: true, // Start true — initializeAuth will set false when done
       error: null,
       lastAuthCheck: null,
 
