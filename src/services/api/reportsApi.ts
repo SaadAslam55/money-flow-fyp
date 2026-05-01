@@ -259,7 +259,7 @@ export async function getSalesReport(
         customer:customers(name)
       `)
       .eq('organization_id', organizationId)
-      .in('status', ['paid', 'partially_paid', 'sent'])
+      .in('status', ['paid', 'partially_paid', 'sent', 'overdue'])
       .gte('invoice_date', startDate)
       .lte('invoice_date', endDate);
 
@@ -270,7 +270,7 @@ export async function getSalesReport(
       .from('invoice_items')
       .select(`
         quantity,
-        total,
+        line_total,
         product:products(name),
         invoice:invoices!inner(organization_id, invoice_date, status)
       `)
@@ -292,7 +292,7 @@ export async function getSalesReport(
         productSales[productName] = { quantity: 0, revenue: 0 };
       }
       productSales[productName].quantity += item.quantity || 0;
-      productSales[productName].revenue += item.total || 0;
+      productSales[productName].revenue += (item as any).line_total || 0;
     });
 
     const salesByProduct = Object.entries(productSales)
@@ -557,7 +557,7 @@ export async function getProductReport(
       .select(`
         product_id,
         quantity,
-        total,
+        line_total,
         invoice:invoices!inner(organization_id, invoice_date, status)
       `)
       .eq('invoice.organization_id', organizationId)
@@ -570,7 +570,7 @@ export async function getProductReport(
     const productMetrics = products?.map((product) => {
       const productSales = invoiceItems?.filter((item) => item.product_id === product.id) || [];
       const totalQuantitySold = productSales.reduce((sum, item) => sum + (item.quantity || 0), 0);
-      const totalRevenue = productSales.reduce((sum, item) => sum + (item.total || 0), 0);
+      const totalRevenue = productSales.reduce((sum, item) => sum + ((item as any).line_total || 0), 0);
 
       return {
         id: product.id,
