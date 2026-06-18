@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useAuth } from './useAuth';
 import * as reportApi from '@/services/api/reportApi';
 import { handleError } from '@/lib/errorHandler';
-import type { DateRange, ReportType } from '@/types/report.types';
+import type { DateRange, ReportType, ReportFilters } from '@/types/report.types';
 
 export function useProfitLossReport(dateRange: DateRange, includeComparison: boolean = false) {
   const { organization } = useAuth();
@@ -49,7 +49,7 @@ export function useCashFlowStatement(dateRange: DateRange) {
   });
 }
 
-export function useSalesReport(dateRange: DateRange, filters?: { category?: string; paymentMethod?: string; customerId?: string }) {
+export function useSalesReport(dateRange: DateRange, filters?: ReportFilters) {
   const { organization } = useAuth();
 
   return useQuery({
@@ -63,7 +63,7 @@ export function useSalesReport(dateRange: DateRange, filters?: { category?: stri
   });
 }
 
-export function useExpenseReport(dateRange: DateRange, filters?: { category?: string; paymentMethod?: string; vendorId?: string }) {
+export function useExpenseReport(dateRange: DateRange, filters?: ReportFilters) {
   const { organization } = useAuth();
 
   return useQuery({

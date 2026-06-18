@@ -6,7 +6,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Upload } from 'lucide-react';
+import { Plus, Download, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PageTemplate } from '@/components/common/PageTemplate';
 import { CustomerList } from '@/components/customers/CustomerList';
@@ -55,7 +55,7 @@ export default function CustomersPage() {
     <div className="flex gap-2">
       {canImport && (
         <Button variant="outline" onClick={() => setShowImportDialog(true)}>
-          <Upload className="mr-2 h-4 w-4" />
+          <Download className="mr-2 h-4 w-4" />
           Import
         </Button>
       )}

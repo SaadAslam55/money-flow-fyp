@@ -289,6 +289,8 @@ export interface ExpenseCategory {
   organization_id: string;
   name: string;
   description?: string | null;
+  color?: string | null;
+  icon?: string | null;
   parent_category_id?: string | null;
   is_active: boolean;
   created_at: string;

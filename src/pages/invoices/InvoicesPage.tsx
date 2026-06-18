@@ -6,7 +6,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Filter, Download, FileText } from 'lucide-react';
+import { Plus, Filter, Upload, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -328,7 +328,7 @@ export default function InvoicesPage() {
 
               {canExport && (
                 <Button variant="outline" onClick={handleExport}>
-                  <Download className="mr-2 h-4 w-4" />
+                  <Upload className="mr-2 h-4 w-4" />
                   Export
                 </Button>
               )}

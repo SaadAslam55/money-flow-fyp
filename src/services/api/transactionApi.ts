@@ -25,8 +25,7 @@ export async function getTransactions(
       .select(`
         *,
         category:expense_categories(id, name, color, icon),
-        bank_account:bank_accounts(id, account_name, bank_name),
-        created_by_user:users!transactions_created_by_fkey(id, full_name, email)
+        bank_account:bank_accounts(id, account_name, bank_name)
       `, { count: 'exact' })
       .eq('organization_id', organizationId);
 
@@ -115,8 +114,7 @@ export async function getTransaction(transactionId: string) {
       .select(`
         *,
         category:expense_categories(*),
-        bank_account:bank_accounts(*),
-        created_by_user:users!transactions_created_by_fkey(*)
+        bank_account:bank_accounts(*)
       `)
       .eq('id', transactionId)
       .single();
@@ -173,8 +171,7 @@ export async function createTransaction(
       .select(`
         *,
         category:expense_categories(id, name, color, icon),
-        bank_account:bank_accounts(id, account_name, bank_name),
-        created_by_user:users!transactions_created_by_fkey(id, full_name, email)
+        bank_account:bank_accounts(id, account_name, bank_name)
       `)
       .single();
 
@@ -250,8 +247,7 @@ export async function updateTransaction(
       .select(`
         *,
         category:expense_categories(id, name, color, icon),
-        bank_account:bank_accounts(id, account_name, bank_name),
-        created_by_user:users!transactions_created_by_fkey(id, full_name, email)
+        bank_account:bank_accounts(id, account_name, bank_name)
       `)
       .single();
 

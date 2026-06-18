@@ -6,7 +6,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Plus, Download, Calculator, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { Plus, Upload, Calculator, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card, CardContent } from '@/components/ui/card';
@@ -70,7 +70,7 @@ export default function TransactionsPage() {
     };
   });
 
-  const { transactions, count, totalPages, isLoading, createTransaction, updateTransaction, deleteTransaction, isCreating, isUpdating } = useTransactions(filters, page);
+  const { transactions, count, totalPages, isLoading, error: transactionError, createTransaction, updateTransaction, deleteTransaction, isCreating, isUpdating } = useTransactions(filters, page);
 
   const { summary } = useTransactionSummary(dateRange.start, dateRange.end);
 
@@ -204,7 +204,7 @@ export default function TransactionsPage() {
             </Button>
           )}
           <Button variant="outline" onClick={handleExport}>
-            <Download className="mr-2 h-4 w-4" />
+            <Upload className="mr-2 h-4 w-4" />
             Export
           </Button>
           {canCreate && (
@@ -222,6 +222,13 @@ export default function TransactionsPage() {
       }
     >
       <div className="space-y-6">
+        {/* Error Banner */}
+        {transactionError && (
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+            <strong>Error loading transactions:</strong> {transactionError.message}. Please check your database connection or contact support.
+          </div>
+        )}
+
         {/* Summary Cards */}
         {summary && (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

@@ -173,7 +173,7 @@ export function CustomerList({
           </Select>
           {onImport && (
             <Button variant="outline" onClick={onImport}>
-              <Upload className="mr-2 h-4 w-4" />
+              <Download className="mr-2 h-4 w-4" />
               Import
             </Button>
           )}
@@ -183,7 +183,7 @@ export function CustomerList({
               onClick={handleExport}
               disabled={isExporting}
             >
-              <Download className="mr-2 h-4 w-4" />
+              <Upload className="mr-2 h-4 w-4" />
               {isExporting ? 'Exporting...' : 'Export'}
             </Button>
           )}

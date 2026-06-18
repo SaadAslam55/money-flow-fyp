@@ -103,13 +103,13 @@ export default function ProductsPage() {
     <div className="flex gap-2">
       {canImport && (
         <Button variant="outline" onClick={handleImport}>
-          <Upload className="mr-2 h-4 w-4" />
+          <Download className="mr-2 h-4 w-4" />
           Import
         </Button>
       )}
       {canExport && (
         <Button variant="outline" onClick={handleExport} disabled={isExporting}>
-          <Download className="mr-2 h-4 w-4" />
+          <Upload className="mr-2 h-4 w-4" />
           Export
         </Button>
       )}

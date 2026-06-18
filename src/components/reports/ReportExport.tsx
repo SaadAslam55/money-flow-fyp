@@ -26,9 +26,9 @@ export function ReportExport({ reportType, reportData, reportName }: ReportExpor
   const handleExport = async (format: 'pdf' | 'excel' | 'csv') => {
     try {
       if (format === 'pdf') {
-        await exportToPDF({ reportType, reportData });
+        await exportToPDF({ reportType, reportData: reportData as Record<string, unknown> });
       } else if (format === 'excel' || format === 'csv') {
-        await exportToExcel({ reportType, reportData });
+        await exportToExcel({ reportType, reportData: reportData as Record<string, unknown> });
       }
     } catch (error) {
       toast.error('Failed to export report');
@@ -62,4 +62,3 @@ export function ReportExport({ reportType, reportData, reportName }: ReportExpor
     </DropdownMenu>
   );
 }
-
