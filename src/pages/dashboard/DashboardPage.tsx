@@ -18,7 +18,7 @@ import { LowStockAlert } from '@/components/dashboard/LowStockAlert';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { BentoGrid } from '@/components/dashboard/BentoGrid';
-import { AIAlertsPanel, AIExecutiveSummary, SmartSearchBar } from '@/components/ai';
+import { AIAlertsPanel, AIExecutiveSummary } from '@/components/ai';
 import { RadialProgress } from '@/components/dashboard/RadialProgress';
 import { DashboardDateRange, type DateRange } from '@/components/dashboard/DashboardDateRange';
 import { PageTemplate } from '@/components/common/PageTemplate';
@@ -136,10 +136,6 @@ export default function DashboardPage() {
       error={error}
       actions={
         <div className="flex items-center gap-3">
-          <SmartSearchBar
-            className="hidden w-72 md:block"
-            placeholder='Ask AI... "overdue invoices from last month"'
-          />
           <DashboardDateRange value={dateRange} onChange={setDateRange} />
           <Button
             variant="outline"
